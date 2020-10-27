@@ -1,4 +1,5 @@
 #!/bin/sh
+# Setup
 
 IP_ADDR=$(ip addr show dev enp0s5|
     sed -ne 's/ *inet \(192.168.50.[0-9]*\).*/\1/p')
