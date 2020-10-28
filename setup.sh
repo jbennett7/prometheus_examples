@@ -49,13 +49,13 @@ setup_node_exporter(){
 
 start_node_exporter(){
   for i in 0 1 2;do
-    ./node_exporter --web.listen-address ${IPADDR}:808${i} &
+    node_exporter-1.0.1.linux-amd64/node_exporter --web.listen-address ${IPADDR}:808${i} &
     echo $! > ~/.node_exporter_${i}-run
   done
 }
 
 start_prometheus(){
-  ./prometheus --config.file=prometheus.yml &
+  prometheus-2.22.0.linux-amd64/prometheus --config.file=prometheus.yml &
   echo $! > ~/.prometheus-run
 }
 
