@@ -55,6 +55,6 @@ start_node_exporter(){
 }
 
 start_prometheus(){
-  ./prometheus --config.file=prometheus.yml
+  ./prometheus --config.file=prometheus.yml &
   echo $! > ~/.prometheus-run
 }
