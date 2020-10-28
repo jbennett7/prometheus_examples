@@ -1,13 +1,13 @@
 #!/bin/sh
 
 WD=$(pwd)
-REPO_URL=https://github.com/prometheus
+REPO=https://github.com/prometheus/
 P_VER=2.22.0
 PROMETHEUS=prometheus-${P_VER}.linux-amd64
-PROMETHEUS_URL=${REPO_URL}/releases/download/v${P_VER}/${PROMETHEUS}.tar.gz
+PROMETHEUS_URL=${REPO}/prometheus/releases/download/v${P_VER}/${PROMETHEUS}.tar.gz
 NE_VER=1.0.1
 NE=node_exporter-${NE_VER}.linux-amd64
-NE_URL=${REPO_URL}/node_exporter/releases/download/v${NE_VER}/${NE}.tar.gz
+NE_URL=${REPO}/node_exporter/releases/download/v${NE_VER}/${NE}.tar.gz
 IP_ADDR=$(ip addr show dev enp0s5|
     sed -ne 's/ *inet \([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*/\1/p')
 
