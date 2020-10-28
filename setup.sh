@@ -58,3 +58,13 @@ start_prometheus(){
   ./prometheus --config.file=prometheus.yml &
   echo $! > ~/.prometheus-run
 }
+
+shutdown_node_exporter(){
+    for i in $(cat ~/.node_exporter*-run);do
+        kill -SIGTERM ${i}
+    done
+}
+
+shutdown_prometheus(){
+    kill -SIGTERM ~/.prometheus-run
+}
