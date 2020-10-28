@@ -1,13 +1,20 @@
 #!/bin/sh
-# Setup
 
+WD=$(pwd)
+REPO_URL=https://github.com/prometheus
+P_VER=2.22.0
+PROMETHEUS=prometheus-${P_VER}.linux-amd64
+PROMETHEUS_URL=${REPO_URL}/releases/download/v${P_VER}/${PROMETHEUS}.tar.gz
+NE_VER=1.0.1
+NE=node_exporter-${NE_VER}.linux-amd64
+NE_URL=${REPO_URL}/node_exporter/releases/download/v${NE_VER}/${NE}.tar.gz
 IP_ADDR=$(ip addr show dev enp0s5|
-    sed -ne 's/ *inet \(192.168.50.[0-9]*\).*/\1/p')
+    sed -ne 's/ *inet \([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*/\1/p')
 
 setup_prometheus(){
-  wget  https://github.com/prometheus/prometheus/releases/download/v2.22.0/prometheus-2.22.0.linux-amd64.tar.gz
-  tar xf prometheus-2.22.0.linux-amd64.tar.gz
-  cat <<EOF > prometheus-2.22.0.linux-amd64/prometheus.yml
+  wget  ${PROMETHEUS_URL}
+  tar xf ${PROMETHEUS}.tar.gz
+  cat <<EOF > ${WD}/${PROMETHEUS}/prometheus.yml
 global:
   scrape_interval: 15s
   external_labels:
@@ -33,7 +40,7 @@ scrape_configs:
     labels:
       group: 'canary'
 EOF
-  cat <<EOF > prometheus-2.22.0.linux-amd64/prometheus.rules.yml
+  cat <<EOF > ${WD}/${PROMETHEUS}/prometheus.rules.yml
 groups:
 - name: cpu-node
   rules:
@@ -43,19 +50,20 @@ EOF
 }
 
 setup_node_exporter(){
-  wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz
-  tar xf node_exporter-1.0.1.linux-amd64.tar.gz
+  wget ${NE_URL}
+  tar xf ${NE}.tar.gz
 }
 
 start_node_exporter(){
   for i in 0 1 2;do
-    node_exporter-1.0.1.linux-amd64/node_exporter --web.listen-address ${IPADDR}:808${i} &
+    ${WD}/${NE}/node_exporter --web.listen-address ${IPADDR}:808${i} &
     echo $! > ~/.node_exporter_${i}-run
   done
 }
 
 start_prometheus(){
-  prometheus-2.22.0.linux-amd64/prometheus --config.file=prometheus.yml &
+  ${WD}/${PROMETHEUS}/prometheus \
+      --config.file=${WD}/${PROMETHEUS}/prometheus.yml &
   echo $! > ~/.prometheus-run
 }
 
