@@ -35,9 +35,9 @@ scrape_configs:
 EOF
   cat <<EOF > prometheus-2.22.0.linux-amd64/prometheus.rules.yml
 groups:
-- names: cpu-node
+- name: cpu-node
   rules:
-  - record: job_instance_mode:node_cpu_seconds:avg_rage5m
+  - record: job_instance_mode:node_cpu_seconds:avg_rate5m
     expr: avg by (job, instance, mode) (rate(node_cpu_seconds_total[5m]))
 EOF
 }
